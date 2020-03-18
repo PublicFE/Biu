@@ -1,0 +1,22 @@
+{
+  "name": "biu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PublicFE/Biu.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PublicFE/Biu/issues"
+  },
+  "homepage": "https://github.com/PublicFE/Biu#readme",
+  "dependencies": {
+    "tree": "^0.1.3"
+  }
+}
