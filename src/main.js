@@ -5,8 +5,6 @@ document.body.appendChild( container );
 FbxLoader(container);
 
 
-
-
 //2
 
 // import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';

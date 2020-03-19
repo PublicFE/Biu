@@ -9,11 +9,11 @@ export default function FbxLoader(container) {
     let mixer;
     // 场景
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xa0a0a0);
-    scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
+    scene.background = new THREE.Color(0x0000ff);
+    scene.fog = new THREE.Fog(0x3385ff, 200, 1000);
 
     // 相机
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+    const camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 1, 2000);
     camera.position.set(100, 200, 300);
 
     // 灯光
@@ -43,19 +43,35 @@ export default function FbxLoader(container) {
     mesh.receiveShadow = true;
     scene.add(mesh);
 
-    const grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000);
+    const grid = new THREE.GridHelper(200, 20, 0x000000, 0x000000);
     grid.material.opacity = 0.2;
     grid.material.transparent = true;
     scene.add(grid);
 
     // model
     const loader = new FBXLoader();
-    loader.load('/Biu/asserts/Defeated.fbx', function (object) {
+    loader.load('/asserts/Walking.fbx', function (object) {
 
         mixer = new THREE.AnimationMixer(object);
 
         const action = mixer.clipAction(object.animations[0]);
-        action.play();
+
+        // action.time = 10;
+        // action.setLoop('LoopRepeat',10)
+
+        const Pause = document.getElementById('Pause');
+        const Go = document.getElementById('GO');
+        const Stop = document.getElementById('Stop');
+        Pause.onclick = ()=>{
+            action.paused = true;
+        }
+        Go.onclick = ()=>{
+            action.paused = false;
+            action.play()
+        };
+        Stop.onclick = ()=>{
+            action.stop();
+        }
 
         object.traverse(function (child) {
 
@@ -70,7 +86,9 @@ export default function FbxLoader(container) {
 
         scene.add(object);
 
-        animate({clock,mixer,scene,camera,renderer,stats})
+        animate({clock,mixer,scene,camera,renderer,stats,action})
+
+    },(x)=>{
 
     });
 

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/rollup -c"
+    "build": "./node_modules/.bin/rollup -c",
+    "dev": "./node_modules/.bin/babel-node rollup.dev.js "
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/PublicFE/Biu#readme",
   "dependencies": {
+    "@babel/node": "^7.8.7",
     "rollup": "^2.1.0",
     "three": "^0.114.0"
   },
@@ -27,6 +29,7 @@
     "@rollup/plugin-node-resolve": "^7.1.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-serve": "^1.0.1",
     "the-answer": "^1.0.0"
   }
 }

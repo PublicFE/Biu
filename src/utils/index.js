@@ -6,7 +6,9 @@ function onWindowResize(camera,renderer) {
 
 }
 
-function animate({clock,mixer,scene,camera,renderer,stats}) {
+function animate({clock,mixer,scene,camera,renderer,stats,action}) {
+
+    //camera.position.x =camera.position.x +1;
 
     requestAnimationFrame(()=>animate({clock,mixer,scene,camera,renderer,stats}));
 
@@ -17,6 +19,7 @@ function animate({clock,mixer,scene,camera,renderer,stats}) {
     renderer.render(scene, camera);
 
     stats.update();
+
 
 }
 
