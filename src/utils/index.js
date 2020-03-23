@@ -6,11 +6,11 @@ function onWindowResize(camera,renderer) {
 
 }
 
-function animate({clock,mixer,scene,camera,renderer,stats,action}) {
+function animate({clock,mixer,scene,camera,renderer}) {
 
     //camera.position.x =camera.position.x +1;
 
-    requestAnimationFrame(()=>animate({clock,mixer,scene,camera,renderer,stats}));
+    requestAnimationFrame(()=>animate({clock,mixer,scene,camera,renderer}));
 
     const delta = clock.getDelta();
 
@@ -18,10 +18,11 @@ function animate({clock,mixer,scene,camera,renderer,stats,action}) {
 
     renderer.render(scene, camera);
 
-    stats.update();
+    // stats.update();
 
 
 }
+
 
 export {
     onWindowResize,

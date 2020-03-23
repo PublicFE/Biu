@@ -1,21 +1,16 @@
 import * as THREE from 'three';
-// 加载器
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
-import Stats from 'three/examples/jsm/libs/stats.module.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {animate, onWindowResize} from "../utils";
 
-export default function FbxLoader(container) {
+export default function FbxLoader(container, source) {
     let mixer;
     // 场景
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0000ff);
-    scene.fog = new THREE.Fog(0x3385ff, 200, 1000);
-
+    setScene(scene, {background: {color: 0x0000ff}, fog: {color: 0x3385ff, near: 200, far: 1000}});
     // 相机
     const camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 1, 2000);
     camera.position.set(100, 200, 300);
-
     // 灯光
     let light = new THREE.HemisphereLight(0xffffff, 0x444444);
     light.position.set(0, 200, 0);
@@ -33,7 +28,6 @@ export default function FbxLoader(container) {
 
     const clock = new THREE.Clock();
 
-
     // ground
     const mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2000, 2000), new THREE.MeshPhongMaterial({
         color: 0x999999,
@@ -49,46 +43,44 @@ export default function FbxLoader(container) {
     scene.add(grid);
 
     // model
-    const loader = new FBXLoader();
-    loader.load('/asserts/Walking.fbx', function (object) {
 
-        mixer = new THREE.AnimationMixer(object);
 
-        const action = mixer.clipAction(object.animations[0]);
+    Promise.all(source.map((url) => getModle(url))).then((arr) => {
 
-        // action.time = 10;
-        // action.setLoop('LoopRepeat',10)
+        arr.forEach((object) => {
+            mixer = new THREE.AnimationMixer(object);
+            mixer.setTime(10)
 
-        const Pause = document.getElementById('Pause');
-        const Go = document.getElementById('GO');
-        const Stop = document.getElementById('Stop');
-        Pause.onclick = ()=>{
-            action.paused = true;
-        }
-        Go.onclick = ()=>{
-            action.paused = false;
+            const action = mixer.clipAction(object.animations[0]);
+
             action.play()
-        };
-        Stop.onclick = ()=>{
-            action.stop();
-        }
+            // action.time = 10;
+            // action.setLoop('LoopRepeat',10)
 
-        object.traverse(function (child) {
-
-            if (child.isMesh) {
-
-                child.castShadow = true;
-                child.receiveShadow = true;
+            const Pause = document.getElementById('Pause');
+            const Go = document.getElementById('GO');
+            const Stop = document.getElementById('Stop');
+            Pause.onclick = () => {
+                scene.translateZ(-10)
+                object.translateZ(10)
 
             }
+            Go.onclick = () => {
+                action.paused = true;
+            };
+            Stop.onclick = () => {
+                action.stop();
+            }
 
+            object.traverse(function (child) {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+            scene.add(object);
         });
-
-        scene.add(object);
-
-        animate({clock,mixer,scene,camera,renderer,stats,action})
-
-    },(x)=>{
+        animate({clock, mixer, scene, camera, renderer})
 
     });
 
@@ -97,19 +89,27 @@ export default function FbxLoader(container) {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
-    container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 100, 0);
     controls.update();
 
-    window.addEventListener('resize', ()=>onWindowResize(camera,renderer), false);
+    window.addEventListener('resize', () => onWindowResize(camera, renderer), false);
+    container.appendChild(renderer.domElement);
+}
 
-    // stats
-    const stats = new Stats();
-    container.appendChild(stats.dom);
+function setScene(scene, {background, fog}) {
+    scene.background = new THREE.Color(background.color);
+    scene.fog = new THREE.Fog(fog.color, fog.near, fog.far);
+}
 
-
+function getModle(url) {
+    const loader = new FBXLoader();
+    return new Promise((resolve, reject) => {
+        loader.load(url, function (object) {
+            resolve(object);
+        })
+    })
 }
 
 

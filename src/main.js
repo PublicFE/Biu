@@ -2,7 +2,7 @@ import FbxLoader from './FbxLoader';
 
 const container = document.createElement( 'div' );
 document.body.appendChild( container );
-FbxLoader(container);
+FbxLoader(container,['/asserts/Walking.fbx']);
 
 
 //2
