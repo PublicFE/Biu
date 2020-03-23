@@ -1,6 +1,6 @@
 
 <div align="center">
- <h1 style="color:blue">Biu-3D特效攻略</h1>
+ <h1 color="blue">Biu-3D特效攻略</h1>
 </div>
 
 
